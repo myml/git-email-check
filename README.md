@@ -18,7 +18,7 @@ chmod +x ~/.config/git/hooks/pre-commit
 git config --global core.hooksPath ~/.config/git/hooks
 ```
 
-### 邮箱设置方式
+### 邮箱设置教程
 
 *下面的邮箱地址换成自己的*
 
@@ -26,7 +26,7 @@ git config --global core.hooksPath ~/.config/git/hooks
 
 `git config user.email wurongjie@deepin.org`
 
-全局设置
+全局设置（建议）
 
 `git config --global user.email wurongjie@deepin.org`
 
