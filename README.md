@@ -30,17 +30,20 @@ git config --global core.hooksPath ~/.config/git/hooks
 
 `git config --global user.email wurongjie@deepin.org`
 
-父目录设置
+父目录匹配
 
-可将从linuxdeepin克隆的仓库统一放置到一个目录中，如 `~/Src/github.com/linuxdeepin/`
-添加下列配置到 `~/.gitconfig`
-```ini
-[includeIf "gitdir/i:~/Src/github.com/linuxdeepin/"]
-        path = ~/.gitconfig_linuxdeepin
-```
 添加下列配置到 `~/.gitconfig_linuxdeepin`
+
 ```ini
 [user]
 	email = wurongjie@deepin.org
 ```
-在 ~/Src/github.com/linuxdeepin/ 目录的所有仓库自动使用新邮箱地址。
+
+添加下列配置到 `~/.gitconfig`
+
+```ini
+[includeIf "gitdir/i:~/Src/github.com/linuxdeepin/"]
+        path = ~/.gitconfig_linuxdeepin
+```
+把从linuxdeepin组织下载的仓库（包括从linuxdeepin fork的）全部放置到一个目录中，如 `~/Src/github.com/linuxdeepin/`
+在该目录下所有仓库会自动使用新邮箱地址。
