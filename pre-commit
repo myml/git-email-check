@@ -1,0 +1,63 @@
+#!/usr/bin/python3
+from codecs import getreader
+import sys
+import subprocess
+from urllib.request import urlopen, HTTPError
+import json
+
+print("git提交邮箱检查中，脚本位置：", sys.argv[0])
+
+
+def checkEmail(email: str):
+    return email.endswith("@deepin.org") or email.endswith("@uniontech.com")
+
+
+def checkOrg(repo: str):
+    return "linuxdeepin/" in repo
+
+
+def getRepoName(url: str):
+    name: str
+    if(url.startswith("http")):
+        name = '/'.join(url.split("/")[-2:])
+    else:
+        name = url.split(":")[-1]
+    return name.rstrip(".git")
+
+
+def execCommand(arr: tuple):
+    return subprocess.check_output(arr).decode().strip()
+
+
+def main():
+    email = execCommand(["git", "config", "user.email"])
+    if len(email) <= 0:
+        return
+    if checkEmail(email):
+        return
+    # 如果没有origin，跳过
+    if "origin" not in execCommand(["git", "remote"]):
+        return
+    # 如果不是公司邮箱，检查仓库是否从linuxdeepin克隆的
+    url = execCommand(["git", "remote", "get-url", "origin"])
+    # 如果仓库不在github，跳过
+    if "github.com" not in url:
+        return
+    name = getRepoName(url)
+    if checkOrg(name):
+        print("请使用公司邮箱")
+        sys.exit(-1)
+    try:
+        resp = urlopen("https://api.github.com/repos/" + name)
+    except HTTPError as e:
+        if(e.getcode() == 404):
+            return
+    result = json.load(resp)
+    if hasattr(result, 'parent'):
+        full_name = result['parent']['full_name']
+        if checkOrg(full_name):
+            print("请使用公司邮箱")
+            sys.exit(-1)
+
+
+main()
