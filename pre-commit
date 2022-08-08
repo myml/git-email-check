@@ -53,7 +53,7 @@ def main():
         if(e.getcode() == 404):
             return
     result = json.load(resp)
-    if hasattr(result, 'parent'):
+    if 'parent' in result:
         full_name = result['parent']['full_name']
         if checkOrg(full_name):
             print("请使用公司邮箱")
